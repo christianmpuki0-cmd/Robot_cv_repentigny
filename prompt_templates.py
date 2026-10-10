@@ -6,19 +6,17 @@ Le ton doit être direct, hautement professionnel, enthousiaste et rédigé excl
 """
 
 def generate_user_prompt(vrai_cv, description_job):
-    return f"""
-    Voici mon profil d'élite et mes compétences réelles :
-    {vrai_cv}
+    return f"""Voici mon profil d'élite et mes compétences réelles :
+{vrai_cv}
 
-    Voici l'offre d'emploi interceptée à Repentigny :
-    {description_job}
+Voici l'offre d'emploi interceptée à Repentigny :
+{description_job}
 
-    Rédige deux blocs de texte distincts séparés UNIQUEMENT par la balise exacte [SEPARATEUR] :
-    1. Un sujet de courriel standardisé optimal pour passer les filtres de tri (Format : Candidature Spécifique - [Nom du Poste] - [Nom du Candidat])
-    2. Le corps du courriel (Maximum 140 mots). Insiste immédiatement sur la proximité géographique à Repentigny, la flexibilité complète des soirs/fins de semaine, l'assiduité, et l'apport de valeur direct face aux besoins du poste.
-    
-    Format de réponse strict à respecter :
-    Sujet : [Votre Sujet]
-    [SEPARATEUR]
-    Bonjour [Nom du responsable ou Gestionnaire], ...
-    """
+Rédige deux blocs de texte distincts séparés UNIQUEMENT par la balise exacte [SEPARATEUR] :
+1. Un sujet de courriel standardisé optimal pour passer les filtres de tri (Format : Candidature Spécifique - [Nom du Poste] - [Nom du Candidat])
+2. Le corps du courriel (Maximum 140 mots). Insiste immédiatement sur la proximité géographique à Repentigny, la flexibilité complète des soirs/fins de semaine, l'assiduité, et l'apport de valeur direct face aux besoins du poste.
+
+Format de réponse strict à respecter sans espaces de début de ligne :
+Sujet : [Votre Sujet]
+[SEPARATEUR]
+Bonjour [Nom du responsable ou Gestionnaire], ..."""
