@@ -4,13 +4,16 @@ import os
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 GMAIL_USER = os.getenv("GMAIL_USER")
-GMAIL_PASS = os.getenv("GMAIL_APP_PASSWORD")  # Mot de passe d'application Google (16 caractères)
+# ✅ CORRECTION : Aligné sur le nom attendu par bot_repentigny.py
+GMAIL_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")  # Mot de passe d'application Google (16 caractères)
 
 # --- CONFIGURATION DE L'IA D'ÉLITE OPEN-SOURCE EN LIGNE (100% GRATUITE VIA GROQ) ---
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-MODELE_IA_EN_LIGNE = "llama-3.1-70b-versatile"
+# ✅ CORRECTION : Utilisation du nom de modèle officiel actif pour Groq Llama 3
+MODELE_IA_EN_LIGNE = "llama3-70b-8192"
 
 # --- COMPTEUR DE BRIDAGE COMPORTEMENTAL (DÉJOUE LES ALERTES ANTI-BOTS) ---
+# ✅ NOTE : Cette variable sera désormais lue correctement par le bot principal
 LIMITE_JOURNALIERE = 25  
 
 # --- MATIÈRE PREMIÈRE DU PROFIL (Optimisée au sommet absolu pour le parsing ATS et les gérants) ---
@@ -36,5 +39,3 @@ EXPÉRIENCES DE VIE ET ENGAGEMENTS (Scolaire / Sportif / Communautaire) :
 - [Exemple : Sport compétitif ou bénévolat à Repentigny] -> Développement de l'éthique de travail, ponctualité et constance.
 - [Exemple : Projets scolaires complexes de groupe] -> Gestion rigoureuse des priorités, respect d'échéanciers stricts et polyvalence.
 """
-
-
