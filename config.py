@@ -18,9 +18,9 @@ LIMITE_JOURNALIERE = 25
 
 # --- MATIÈRE PREMIÈRE DU PROFIL (Optimisée au sommet absolu pour le parsing ATS et les gérants) ---
 MON_VRAI_CV = """
-Nom complet: [Votre Nom]
-Téléphone: [Votre Numéro de Téléphone]
-Courriel: [Votre Courriel]
+Nom complet: Christian Mpuki
+Téléphone: 438-993-4590
+Courriel: christianmpuki0@gmail.com
 Ville: Repentigny, QC
 Statut: Étudiant autonome, ponctuel et disponible immédiatement.
 
@@ -36,6 +36,6 @@ COMPÈTENCES TRANSFÉRABLES STRUCTURÉES (Sémantique ATS validée) :
 - Logistique locale : Résident de Repentigny avec mobilité 100 % autonome (Zéro enjeu de transport ou de retard).
 
 EXPÉRIENCES DE VIE ET ENGAGEMENTS (Scolaire / Sportif / Communautaire) :
-- [Exemple : Sport compétitif ou bénévolat à Repentigny] -> Développement de l'éthique de travail, ponctualité et constance.
-- [Exemple : Projets scolaires complexes de groupe] -> Gestion rigoureuse des priorités, respect d'échéanciers stricts et polyvalence.
+- bénévolat à Repentigny, magasin société de Saint-Vincent de Paul -> Développement de l'éthique de travail, ponctualité et constance.
+- formation de sauvetage aquatique -> Gestion rigoureuse des priorités, respect d'échéanciers stricts et polyvalence.
 """
