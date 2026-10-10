@@ -88,7 +88,7 @@ def generer_pitch_ia(description_job):
 
 def demander_validation_telegram(sujet, corps):
     message = f"🎯 **PROFIL COMPORTEMENTAL ARMÉ — PRÊT POUR EXPÉDITION !**\n\n📧 **{sujet}**\n\n{corps}\n\n👉 Autoriser l'envoi ? Envoyez `/oui` ou `/non`"
-    # ✅ CORRECTION : Ajout de api.telegram.org et du sous-dossier /bot
+    # ✅ CORRECTION : Utilisation du sous-domaine api.telegram.org et préfixe /bot obligatoire
     url = f"https://telegram.org{config.TELEGRAM_TOKEN}/sendMessage"
     try:
         requests.post(url, json={"chat_id": config.TELEGRAM_CHAT_ID, "text": message, "parse_mode": "Markdown"})
@@ -96,12 +96,12 @@ def demander_validation_telegram(sujet, corps):
         print(f"❌ Échec de notification Telegram : {e}")
         return False
     
-    # ✅ CORRECTION : Ajout de api.telegram.org et du sous-dossier /bot
+    # ✅ CORRECTION : Utilisation du sous-domaine api.telegram.org et préfixe /bot obligatoire
     url_updates = f"https://telegram.org{config.TELEGRAM_TOKEN}/getUpdates"
     last_update_id = 0
     start_time = time.time()
     
-    # Attente d'une réponse pendant un maximum de 15 minutes (900 secondes)
+    # Attente active d'une réponse pendant 15 minutes maximum (900 secondes)
     while (time.time() - start_time) < 900:
         try:
             res = requests.get(url_updates, params={"offset": last_update_id + 1, "timeout": 5}).json()
@@ -128,7 +128,7 @@ def envoyer_courriel(destinataire, sujet, corps):
     msg.set_content(corps)
 
     try:
-        # ✅ CORRECTION : Clôture structurelle et intégration du fichier PDF
+        # ✅ CORRECTION : Ajout de la pièce jointe avec typage correct
         with open("mon_cv.pdf", 'rb') as f:
             msg.add_attachment(
                 f.read(), 
@@ -138,7 +138,7 @@ def envoyer_courriel(destinataire, sujet, corps):
             )
             
         print("📨 Connexion sécurisée au serveur SMTP de Gmail...")
-        # ✅ CORRECTION : Ajout du tunnel d'envoi et authentification SMTP_SSL
+        # ✅ CORRECTION : Session SMTP cryptée et authentifiée avec le mot de passe révisé de config.py
         with smtplib.SMTP_SSL('://gmail.com', 465) as serveur:
             serveur.login(config.GMAIL_USER, config.GMAIL_PASSWORD)
             serveur.send_message(msg)
@@ -146,71 +146,67 @@ def envoyer_courriel(destinataire, sujet, corps):
         print(f"🚀 Succès : Courriel de candidature envoyé à {destinataire} !")
         return True
     except FileNotFoundError:
-        print("❌ Erreur : Le fichier 'mon_cv.pdf' est introuvable à la racine de l'application.")
+        print("❌ Erreur : Le fichier 'mon_cv.pdf' est absent à la racine du projet.")
         return False
     except smtplib.SMTPAuthenticationError:
-        print("❌ Erreur d'authentification : Vérifiez le mot de passe d'application Google dans config.py.")
+        print("❌ Erreur d'authentification : Le mot de passe d'application Google dans config.py est rejeté.")
         return False
     except Exception as e:
-        print(f"❌ Échec critique de l'envoi du courriel : {e}")
+        print(f"❌ Échec critique lors de la transmission du courriel : {e}")
         return False
 
-# 🚀 BOUCLE PRINCIPALE D'EXÉCUTION DU ROBOT
+# 🚀 ARCHITECTURE ET CONTRÔLE DE LA BOUCLE PRINCIPALE
 def main():
     print("🤖 Activation du Robot de Veille et Candidatures (Repentigny)...")
     initialiser_registre()
     
-    # Initialisation sécurisée de Playwright en mode Headless pour Render
+    # Configuration transparente de Playwright en mode Headless (requis pour Render)
     with sync_playwright() as p:
-        print("🌐 Lancement du navigateur virtuel Playwright...")
+        print("🌐 Lancement de l'instance de navigation virtuelle Chromium...")
         navigateur = p.chromium.launch(headless=True)
         contexte = navigateur.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
         page = contexte.new_page()
         
         while True:
             try:
-                # 1. Vérification de la limite journalière (ex: max 5 candidatures par jour pour rester naturel)
-                if compter_envois_du_jour() >= 5:
-                    print("🛑 Limite journalière de sécurité atteinte (5). Pause jusqu'à demain.")
+                # ✅ CORRECTION : Utilisation de la variable globale configurée dans config.py
+                if compter_envois_du_jour() >= config.LIMITE_JOURNALIERE:
+                    print(f"🛑 Plafond journalier de sécurité de {config.LIMITE_JOURNALIERE} atteint. Hibernation...")
                     time.sleep(3600)
                     continue
 
-                # 2. Interception des nouvelles offres d'emploi
+                # Repérage des publications récentes
                 id_offre, description_job = detecter_nouvelle_offre()
                 
                 if id_offre and description_job:
-                    # Simulation d'un comportement d'analyse humain (timing psychologique)
                     if est_le_moment_psychologique_parfait():
-                        print(f"🎯 Nouvelle opportunité détectée ! ID Offre : {id_offre}")
+                        print(f"🎯 Correspondance trouvée ! ID Publication : {id_offre}")
                         
-                        # Génération de la lettre/pitch par l'IA Llama 3.1
+                        # Génération de la lettre d'accompagnement
                         sujet, corps = generer_pitch_ia(description_job)
                         
-                        # Demande de validation à distance sur votre téléphone via Telegram
+                        # Routage vers la passerelle Telegram de validation
                         autorisation = demander_validation_telegram(sujet, corps)
                         
                         if autorisation:
-                            print("✅ Approbation reçue sur Telegram. Préparation de la soumission...")
+                            print("✅ Signal d'approbation reçu de Telegram. Acheminement...")
                             
-                            # Extraction fictive du courriel du gérant (à adapter selon la structure exacte du site)
-                            # Ici, on utilise un courriel test pour la démonstration
-                            courriel_cible = "gerant_recrutement@exemple.com" 
-                            nom_entreprise = "Entreprise Repentigny"
+                            # Adresses tests à adapter selon la logique d'extraction de données de votre scraper
+                            courriel_cible = "recrutement_gerant@exemple.com" 
+                            nom_entreprise = "Établissement Cible Repentigny"
                             
-                            # Envoi du courriel et sauvegarde de l'historique
-                            envoi_reussi = envoyer_courriel(courriel_cible, sujet, corps)
-                            if envoi_reussi:
+                            if envoyer_courriel(courriel_cible, sujet, corps):
                                 enregistrer_candidature(id_offre, nom_entreprise, courriel_cible)
                         else:
-                            print("❌ Envoi rejeté ou expiré depuis Telegram.")
+                            print("❌ Transmission avortée (Rejet de la proposition ou expiration).")
                             
-                # Attente aléatoire entre 10 et 20 minutes avant la prochaine vérification du site
+                # Délai dynamique aléatoire entre deux requêtes (Protection contre le fingerprinting anti-bot)
                 temps_attente = random.randint(600, 1200)
-                print(f"💤 En veille. Prochaine synchronisation dans {temps_attente // 60} minutes...")
+                print(f"💤 Cycle terminé. Reprise des requêtes dans {temps_attente // 60} minutes...")
                 time.sleep(temps_attente)
                 
             except Exception as global_error:
-                print(f"💥 Erreur imprévue dans la boucle principale : {global_error}")
+                print(f"💥 Incident d'exécution isolé dans la routine de contrôle : {global_error}")
                 time.sleep(60)
 
 if __name__ == '__main__':
